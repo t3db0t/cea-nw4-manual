@@ -46,5 +46,15 @@ The steps I used to create this are:
    module.exports = withNativeWind(config, { input: "./global.css" });
    ```
 
-8. `pnpm exec expo start -c`
-9. I then added the Tailwind test code you see in the 2 tabs.
+8. Create `global.css`:
+
+   ```
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+   ```
+
+9. Add `import "@/global.css";` to `app/_layout.tsx`
+
+10. `pnpm exec expo start -c`
+11. I then added the Tailwind test code you see in the 2 tabs.
