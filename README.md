@@ -1,50 +1,50 @@
-# Welcome to your Expo app 👋
+This is a demo repo for getting Expo 54 to work with Nativewind 4 and Tailwind 3.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The steps I used to create this are:
 
-## Get started
+1. `pnpx create-expo-app`
+2. `pnpm exec expo install expo-router@~6.0.9`
+3. `pnpm add -D tailwindcss@^3.4.18`
+4. ```
+   pnpm add nativewind@latest
+   pnpm add -D prettier prettier-plugin-tailwindcss
+   ```
+5. Create `babel.config.js`:
 
-1. Install dependencies
-
-   ```bash
-   npm install
+   ```
+   module.exports = function (api) {
+   api.cache(true);
+   return {
+      presets: [
+         // Add jsxImportSource so className compiles correctly
+         ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+         "nativewind/babel",
+      ],
+      plugins: [
+         "react-native-worklets/plugin", // replaces old 'react-native-reanimated/plugin'
+      ],
+   };
+   };
    ```
 
-2. Start the app
+6. Create `tailwind.config.js`:
 
-   ```bash
-   npx expo start
+   ```
+   module.exports = {
+   presets: [require("nativewind/preset")],
+   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+   darkMode: "class",
+   };
    ```
 
-In the output, you'll find options to open the app in a
+7. Create `metro.config.js`:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```
+   const { getDefaultConfig } = require("expo/metro-config");
+   const { withNativeWind } = require("nativewind/metro");
+   const config = getDefaultConfig(__dirname);
+   module.exports = withNativeWind(config, { input: "./global.css" });
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+8. `pnpm exec expo start -c`
+9. I then added the Tailwind test code you see in the 2 tabs.
